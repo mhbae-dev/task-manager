@@ -10,6 +10,7 @@ connectDB();
 
 //MIDDLEWARE
 app.use(express.json());
+app.use(express.static("./public"));
 
 //ROUTES
 app.use("/api/v1/tasks", taskRouter);

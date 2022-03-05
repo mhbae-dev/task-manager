@@ -37,10 +37,23 @@ const getTask = async (req, res) => {
   }
 };
 
-const updateTask = (req, res) => {
+const updateTask = async (req, res) => {
   try {
-    res.send("update task");
-  } catch (error) {}
+    const { id } = req.params;
+
+    const task = await Task.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!task) {
+      return res.status(404).json({ mgs: `No task with id: ${task} ` });
+    }
+
+    res.status(200).json({ task });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
 };
 
 const deleteTask = async (req, res) => {
@@ -50,7 +63,7 @@ const deleteTask = async (req, res) => {
     if (!task) {
       return res.status(404).json({ mgs: `No task with id: ${task} ` });
     }
-    res.status(200).send();
+    res.status(200).json({ task });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
